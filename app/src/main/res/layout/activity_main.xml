@@ -13,9 +13,5 @@
         android:layout_alignParentStart="true"
         android:gravity="center_vertical|center_horizontal" />
 
-    <com.hci.androidclock.MyView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/grid"/>
 
 </RelativeLayout>

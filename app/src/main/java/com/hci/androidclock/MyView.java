@@ -1,91 +1,125 @@
 package com.hci.androidclock;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Point;
-import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
 import android.util.AttributeSet;
-import android.view.Display;
-import android.view.MotionEvent;
+import android.util.Log;
 import android.view.View;
 
-public class MyView extends View{
+import java.util.List;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
-        // The paint class holds style and color information for drawing
-        // See: http://developer.android.com/reference/android/graphics/Paint.html
-        // We'll use it as our one and only one paint object for doodling. More complex
-        // apps will have multiple paint objects configured with different colors, styles, etc.
-        private Paint _paintDoodle = new Paint();
+public class MyView extends View {
 
-        // The path class encapsulates geometric paths such as straight lines or cubic curves
-        // See: http://developer.android.com/reference/android/graphics/Path.html
-        // In this case, we use the path object to store the touch down and touch move locations,
-        // which are then drawn to the screen
-        private Path _path = new Path();
+    private final int SECOND = 1000;
+    private final int MINUTE = 60000;
 
-        public MyView(Context context) {
-            super(context);
-            init(null, 0);
-        }
+    // Should make user editable in settings
+    private final int SQUARE_DENSITY = 6;
+    private final int COLOR_1 = Color.BLACK;
+    private final int COLOR_2 = Color.LTGRAY;
+    private final int TIME_INTERVAL = MINUTE;
 
-        public MyView(Context context, AttributeSet attrs) {
-            super(context, attrs);
-            init(attrs, 0);
-        }
+    private int viewHeight;
+    private int viewWidth;
+    private int numCols;
+    private int numRows;
 
-        public MyView(Context context, AttributeSet attrs, int defStyle) {
-            super(context, attrs, defStyle);
-            init(attrs, defStyle);
-        }
+    private Timer _timer = new Timer();
 
-        /**
-         * Because we have more than one constructor (i.e., overloaded constructors), we use
-         * a separate initialization method
-         * @param attrs
-         * @param defStyle
-         */
-        private void init(AttributeSet attrs, int defStyle){
-            _paintDoodle.setColor(Color.RED);
-            _paintDoodle.setAntiAlias(true);
-            _paintDoodle.setStyle(Paint.Style.STROKE);
-        }
+    private Grid blockGrid;
 
-        @Override
-        public void onDraw(Canvas canvas){
-            super.onDraw(canvas);
+    public MyView(Context context) {
+        super(context);
+        init();
+    }
+    public MyView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
 
-            //canvas.drawLine(0, 0, getWidth(), getHeight(), _paintDoodle);
-            //canvas.drawPath(_path, _paintDoodle);
-//    public Grid(int screenHeight, int screenWidth, int h, int w, Canvas c, Paint p, int a, int b) {
-            Paint paint = new Paint();
+    public MyView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        init();
+    }
 
-            Grid g = new Grid(getHeight(), getWidth(), 20, 20, canvas, paint, Color.RED, Color.BLUE);
-            g.addSquareToColumn(1);
+    private void init() {
 
-        }
+    }
 
-        @Override
-        public boolean onTouchEvent(MotionEvent motionEvent){
-            float touchX = motionEvent.getX();
-            float touchY = motionEvent.getY();
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
 
-            switch(motionEvent.getAction()){
-                case MotionEvent.ACTION_DOWN:
-                    _path.moveTo(touchX, touchY);
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    _path.lineTo(touchX, touchY);
-                    break;
-                case MotionEvent.ACTION_UP:
-                    break;
+        viewHeight = getHeight();
+        viewWidth = getWidth();
+
+        double ratio = viewHeight / (double) viewWidth;
+        numRows = (int) (ratio * SQUARE_DENSITY * 5);
+        numCols = (int) ((1 / ratio) * SQUARE_DENSITY * 5);
+
+        startTimer();
+    }
+
+    private void startTimer() {
+        int interval = TIME_INTERVAL / (numRows * numCols);
+
+        final MyView thisView = this;
+
+        _timer = new Timer();
+
+        _timer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+
+                ((Activity) thisView.getContext()).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (blockGrid != null) {
+
+                            addABlock();
+                        }
+                    }
+                });
             }
+        }, 0, interval);
 
-            invalidate();
-            return true;
+    }
+
+    public void addABlock() {
+        List<Integer> unfilled = blockGrid.getUnfilledCols();
+
+        Random rand = new Random();
+
+        if (unfilled.isEmpty()) {
+            blockGrid.switchGrid();
+            unfilled = blockGrid.getUnfilledCols();
         }
+
+        int colToAdd = unfilled.get(rand.nextInt(unfilled.size()));
+        blockGrid.addSquareToColumn(colToAdd);
+
+        invalidate();
+    }
+
+    public void activityPaused() {
+        _timer.cancel();
+    }
+
+    @Override
+    public void onDraw(Canvas canvas){
+        super.onDraw(canvas);
+
+        if (blockGrid == null) {
+            blockGrid = new Grid(canvas, viewHeight, viewWidth, numRows, numCols);
+        } else {
+            blockGrid.updateGrid(canvas);
+        }
+
+    }
 }

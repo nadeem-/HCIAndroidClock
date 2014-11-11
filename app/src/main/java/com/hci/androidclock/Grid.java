@@ -3,59 +3,132 @@ package com.hci.androidclock;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by nadeem on 11/10/14.
  */
 public class Grid {
-    int height;
-    int width;
     int columnCounts[];
+
     int primaryColor;
     int bgColor;
-    Paint paint;
-    Canvas canvas;
+
+    int gridHeight;
+    int gridWidth;
     int squareHeight;
     int squareWidth;
 
-    public Grid(int screenHeight, int screenWidth, int h, int w, Canvas c, Paint p, int colorA, int colorB) {
-        squareHeight = screenHeight / h;
-        squareWidth = screenWidth / w;
-        this.height = h;
-        this.width = w;
-        this.canvas = c;
-        this.paint = p;
+    boolean isRandom = false;
+
+    Paint paint;
+
+    public Grid(Canvas c, int screenHeight, int screenWidth, int gridHeight, int gridWidth, int colorA, int colorB) {
+
+        this.gridHeight = gridHeight;
+        this.gridWidth = gridWidth;
+        this.squareHeight = (int) Math.ceil(((double) screenHeight) / gridHeight);
+        this.squareWidth = (int) Math.ceil(((double) screenWidth) / gridWidth);
+        this.paint = new Paint();
         this.primaryColor = colorA;
         this.bgColor = colorB;
-        columnCounts = new int[w];
+        this.columnCounts = new int[gridWidth];
 
-        updateGrid();
+        updateGrid(c);
+    }
+
+    // Randomize colors
+    public Grid(Canvas c, int screenHeight, int screenWidth, int gridHeight, int gridWidth) {
+        this(c, screenHeight, screenWidth, gridHeight, gridWidth, 0, 0);
+
+        isRandom = true;
+
+        this.primaryColor = getRandColor();
+        this.bgColor = getRandColor();
+        while (colorDistance(bgColor, primaryColor) < 0.2) {
+            bgColor = getRandColor();
+        }
+    }
+
+    public void switchGrid() {
+
+        if (isRandom) {
+            bgColor = getRandColor();
+
+            while (colorDistance(bgColor, primaryColor) < 0.2) {
+                bgColor = getRandColor();
+            }
+        }
+
+        int temp = primaryColor;
+        primaryColor = bgColor;
+        bgColor = temp;
+
+        for (int col = 0; col < gridWidth; col++) {
+            columnCounts[col] = 0;
+        }
     }
 
     public void addSquareToColumn(int col) {
+
         columnCounts[col] += 1;
-        updateGrid();
     }
 
-    public void updateGrid() {
+    public boolean isColumnFilled(int col) {
+        return (columnCounts[col] == gridHeight);
+    }
 
-        for(int col = 0; col < width; col++) {
-            for(int row = 0; row < height; row++) {
-                int currRowBottom = height - row;
-
-                if(currRowBottom > columnCounts[col]) {
-                    paint.setColor(Color.BLUE);
-                    paint.setStyle(Paint.Style.STROKE);
-                }else {
-                    paint.setColor(Color.RED);
-                    paint.setStyle(Paint.Style.FILL);
-                }
-
-                int top = row * squareHeight;
-                int left = col * squareWidth;
-                canvas.drawRect(left, top, left + squareWidth, top + squareHeight, paint);
+    public List<Integer> getUnfilledCols() {
+        List<Integer> unfilledIndexes = new ArrayList<Integer>();
+        for (int col = 0; col < gridWidth; col++) {
+            if (!isColumnFilled(col)) {
+                unfilledIndexes.add(col);
             }
         }
+
+        return unfilledIndexes;
+    }
+
+    public void updateGrid(Canvas c) {
+        for (int col = 0; col < gridWidth; col++) {
+            int top = 0;
+            int middle = (gridHeight - columnCounts[col]) * squareHeight;
+            int bottom = gridHeight * squareHeight;
+            int left = col * squareWidth;
+            int right = left + squareWidth;
+
+            paint.setColor(bgColor);
+            c.drawRect(left, top, right, middle, paint);
+
+            paint.setColor(primaryColor);
+            c.drawRect(left, middle, right, bottom, paint);
+        }
+    }
+
+    private static int getRandColor() {
+
+        // Make grays more common because they look nice
+        double randGrayProb = 0.3;
+        Random rnd = new Random();
+
+        if (rnd.nextDouble() < randGrayProb) {
+            int gray = rnd.nextInt(256);
+            return Color.argb(255, gray, gray, gray);
+        }
+
+        return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+    }
+
+    // Used to detect how similar two colors are
+    private static double colorDistance(int color1, int color2) {
+        double diffR = (double) (Color.red(color1) - Color.red(color2));
+        double diffG = (double) (Color.green(color1) - Color.green(color2));
+        double diffB = (double) (Color.blue(color1) - Color.blue(color2));
+
+        return Math.sqrt((Math.pow(diffR, 2) + Math.pow(diffG, 2) + Math.pow(diffB, 2)) / (Math.pow(255, 2)*3));
     }
 }

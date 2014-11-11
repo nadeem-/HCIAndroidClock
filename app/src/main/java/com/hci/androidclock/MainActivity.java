@@ -1,12 +1,11 @@
 package com.hci.androidclock;
 
 import android.app.Activity;
-import android.graphics.Canvas;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.os.Handler;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -37,8 +36,6 @@ public class MainActivity extends Activity {
     // http://developer.android.com/reference/android/os/Handler.html
     private Handler _uiHandler = new Handler();
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +61,9 @@ public class MainActivity extends Activity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.switch_clock) {
+            Intent intent = new Intent(MainActivity.this, DrawClockActivity.class);
+            startActivityForResult(intent, 1);
         }
 
         return super.onOptionsItemSelected(item);

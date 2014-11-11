@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 18
     buildToolsVersion "20.0.0"
 
     defaultConfig {
         applicationId "com.hci.androidclock"
-        minSdkVersion 21
-        targetSdkVersion 21
+        minSdkVersion 18
+        targetSdkVersion 18g
         versionCode 1
         versionName "1.0"
     }
