@@ -1,6 +1,7 @@
 package com.hci.androidclock;
 
 import android.app.Activity;
+import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.Menu;
 import android.os.Handler;
@@ -35,6 +36,7 @@ public class MainActivity extends Activity {
     // from the Timer thread to the UI thread.
     // http://developer.android.com/reference/android/os/Handler.html
     private Handler _uiHandler = new Handler();
+
 
 
     @Override
