@@ -8,6 +8,10 @@
 package com.hci.androidclock;
 
 public final class R {
+    public static final class array {
+        public static final int updateFrequency=0x7f050000;
+        public static final int updateFrequencyValues=0x7f050001;
+    }
     public static final class attr {
         /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
@@ -44,37 +48,53 @@ containing a value of this type.
         public static final int exampleString=0x7f010000;
     }
     public static final class dimen {
-        public static final int activity_horizontal_margin=0x7f040000;
-        public static final int activity_vertical_margin=0x7f040001;
+        public static final int activity_horizontal_margin=0x7f060000;
+        public static final int activity_vertical_margin=0x7f060001;
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f080002;
-        public static final int grid=0x7f080000;
-        public static final int switch_clock=0x7f080003;
-        public static final int textViewCounter=0x7f080001;
+        public static final int action_settings=0x7f0a0006;
+        public static final int colorButton1=0x7f0a0002;
+        public static final int colorButton2=0x7f0a0003;
+        public static final int color_picker=0x7f0a0008;
+        public static final int grid=0x7f0a0004;
+        public static final int gridView=0x7f0a0000;
+        public static final int selectColors=0x7f0a0001;
+        public static final int switch_clock=0x7f0a0007;
+        public static final int textViewCounter=0x7f0a0005;
     }
     public static final class layout {
-        public static final int activity_draw_clock=0x7f030000;
-        public static final int activity_main=0x7f030001;
-        public static final int sample_my_view=0x7f030002;
+        public static final int activity_color_picker=0x7f030000;
+        public static final int activity_draw_clock=0x7f030001;
+        public static final int activity_main=0x7f030002;
+        public static final int activity_settings=0x7f030003;
+        public static final int sample_my_view=0x7f030004;
     }
     public static final class menu {
-        public static final int draw_clock=0x7f070000;
-        public static final int menu_main=0x7f070001;
+        public static final int color_picker=0x7f090000;
+        public static final int draw_clock=0x7f090001;
+        public static final int menu_main=0x7f090002;
+        public static final int settings=0x7f090003;
     }
     public static final class string {
-        public static final int action_settings=0x7f050000;
-        public static final int app_name=0x7f050001;
-        public static final int switch_clock=0x7f050002;
-        public static final int title_activity_draw_clock=0x7f050003;
+        public static final int action_settings=0x7f070000;
+        public static final int app_name=0x7f070001;
+        public static final int color_picker=0x7f070002;
+        public static final int hello_world=0x7f070003;
+        public static final int switch_clock=0x7f070004;
+        public static final int title_activity_color_picker=0x7f070005;
+        public static final int title_activity_draw_clock=0x7f070006;
+        public static final int title_activity_settings=0x7f070007;
     }
     public static final class style {
         /**  Customize your theme here. 
          */
-        public static final int AppTheme=0x7f060000;
+        public static final int AppTheme=0x7f080000;
+    }
+    public static final class xml {
+        public static final int user_settings=0x7f040000;
     }
     public static final class styleable {
         /** Attributes that can be used with a MyView.

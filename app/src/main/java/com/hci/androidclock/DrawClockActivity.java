@@ -35,7 +35,7 @@ public class DrawClockActivity extends Activity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(DrawClockActivity.this, SettingsActivity.class);
+            Intent intent = new Intent(DrawClockActivity.this, UserSettingActivity.class);
             startActivityForResult(intent, 1);
         } else if (id == R.id.switch_clock) {
             Intent intent = new Intent(DrawClockActivity.this, MainActivity.class);

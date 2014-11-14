@@ -60,7 +60,7 @@ public class MainActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            Intent intent = new Intent(MainActivity.this, UserSettingActivity.class);
             startActivityForResult(intent, 1);
         } else if (id == R.id.switch_clock) {
             Intent intent = new Intent(MainActivity.this, DrawClockActivity.class);
