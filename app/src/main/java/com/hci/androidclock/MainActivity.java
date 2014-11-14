@@ -2,21 +2,23 @@ package com.hci.androidclock;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
 
 public class MainActivity extends Activity {
-
-
     // This is just a dummy counter that counts upwards. We'll display
     // the current count value in a TextView. Note: I like to prefix my member variables
     // by the underscore character--this is just a convention, others use 'm'. For example,
@@ -36,13 +38,40 @@ public class MainActivity extends Activity {
     // http://developer.android.com/reference/android/os/Handler.html
     private Handler _uiHandler = new Handler();
 
+
+    // preferences
+    public final String blackColorStr = "-16777216";
+    boolean display24HrTime;
+    boolean displayTimeZone;
+    int clockTextColor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        restorePreferences();
+
         updateClock();
+
+       //SharedPreferences settings = getSharedPreferences("pref", 0);
+       // boolean silent = settings.getBoolean("silentMode", false);
+       // setSilent(silent);
     }
 
+    protected void onStart() {
+        super.onStart();
+
+        restorePreferences();
+    }
+
+    public void restorePreferences() {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        display24HrTime = sharedPrefs.getBoolean("prefClock1Military", false);
+        displayTimeZone = sharedPrefs.getBoolean("prefClockTimeZone", false);
+
+        // update clock text color
+        clockTextColor = Integer.parseInt(sharedPrefs.getString("prefClockTextColor", blackColorStr));
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -92,9 +121,20 @@ public class MainActivity extends Activity {
 
                 // set clock time variables
                 int hour = currentCalendarTime.get(Calendar.HOUR);
+
+                if(display24HrTime) {
+                    hour = currentCalendarTime.get(Calendar.HOUR_OF_DAY);
+                }
                 int minute = currentCalendarTime.get(Calendar.MINUTE);
                 int sec = currentCalendarTime.get(Calendar.SECOND);
-                timeStr = String.format("%02d:%02d:%02d %s", hour, minute, sec, amPmText);
+
+                String timeZoneStr = "";
+                if(displayTimeZone) {
+                    timeZoneStr = currentCalendarTime.getTimeZone().getDisplayName();
+                    timeStr = String.format("%02d:%02d:%02d %s %s", hour, minute, sec, amPmText, timeZoneStr);
+                }else {
+                    timeStr = String.format("%02d:%02d:%02d %s", hour, minute, sec, amPmText);
+                }
 
                 // set date variables
                 int month = currentCalendarTime.get(Calendar.MONTH);
@@ -109,46 +149,11 @@ public class MainActivity extends Activity {
 
                         TextView textView = (TextView)findViewById(R.id.textViewCounter);
                         textView.setText(timeStr + "\n" + dateStr);
+                        textView.setTextColor(clockTextColor);
                     }
                 });
             }
         }, 0, 1000);
     }
 
-    /*
-        /**
-     * This is hooked up in the XML. See 'android:onClick="onButtonStartTimer"'
-     * @param view
-
-    public void onButtonStartTimer(View view){
-        // The "view" in this case is the view that triggered the event
-        // We disable the start timer button so that it cannot be triggered more than once
-        view.setEnabled(false);
-
-        // The code below would also work to disable the button
-        // I include it here for illustrative purposes
-        //View buttonView = findViewById(R.id.buttonStartTimer);
-        //view.setEnabled(false);
-
-        // We are using a few anonymous classes here; which makes the code a little more
-        // complex looking than it really is. The schedule method of Timer takes in a TimerTask,
-        // followed by a long delay (in milliseconds) and a long period (in milliseconds)
-        _timerCount.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                _counter++;
-
-                // Use the handler to marshal/invoke the Runnable code on the UI thread
-                _uiHandler.post(new Runnable(){
-                    @Override
-                    public void run(){
-                        TextView textView = (TextView)findViewById(R.id.textViewCounter);
-                        textView.setText(_counter + "");
-                    }
-                });
-            }
-        }, 0, 1000);
-    }
-     */
 }

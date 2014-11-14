@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <PreferenceCategory android:title="Basic Clock Settings" >
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="prefClock1Military"
+            android:summary="Show 24 hour time"
+            android:title="Time format" >
+        </SwitchPreference>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="prefClockTimeZone"
+            android:summary="Display Time Zone"
+            android:title="Time Zone" >
+        </SwitchPreference>
+        <ListPreference
+            android:key="prefClockTextColor"
+            android:title="Text Color"
+            android:summary="Set Clock Text Color"
+            android:entries="@array/textColors"
+            android:entryValues="@array/textColorsValues"
+            />
+    </PreferenceCategory>
+</PreferenceScreen>

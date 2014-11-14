@@ -2,6 +2,18 @@
 <resources>
     <!-- From: file:/Users/nadeem/AndroidStudioProjects/HCIAndroidClock/app/src/main/res/values/arrays.xml -->
     <eat-comment/>
+    <string-array name="textColors">
+        <item name="red">Red</item>
+        <item name="blue">Blue</item>
+        <item name="black">Black</item>
+        <item name="green">Green</item>
+    </string-array>
+    <string-array name="textColorsValues">
+        <item name="red">-65536</item>
+        <item name="blue"> -16776961</item>
+        <item name="black">-16777216</item>
+        <item name="green">-16711936</item>
+    </string-array>
     <string-array name="updateFrequency">
         <item name="1">Daily</item>
         <item name="7">Weekly</item>

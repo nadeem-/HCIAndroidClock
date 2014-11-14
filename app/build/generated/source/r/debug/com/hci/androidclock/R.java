@@ -9,8 +9,10 @@ package com.hci.androidclock;
 
 public final class R {
     public static final class array {
-        public static final int updateFrequency=0x7f050000;
-        public static final int updateFrequencyValues=0x7f050001;
+        public static final int textColors=0x7f050000;
+        public static final int textColorsValues=0x7f050001;
+        public static final int updateFrequency=0x7f050002;
+        public static final int updateFrequencyValues=0x7f050003;
     }
     public static final class attr {
         /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
@@ -69,8 +71,7 @@ containing a value of this type.
         public static final int activity_color_picker=0x7f030000;
         public static final int activity_draw_clock=0x7f030001;
         public static final int activity_main=0x7f030002;
-        public static final int activity_settings=0x7f030003;
-        public static final int sample_my_view=0x7f030004;
+        public static final int sample_my_view=0x7f030003;
     }
     public static final class menu {
         public static final int color_picker=0x7f090000;
