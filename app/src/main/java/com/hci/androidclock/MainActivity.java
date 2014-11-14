@@ -60,9 +60,13 @@ public class MainActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivityForResult(intent, 1);
         } else if (id == R.id.switch_clock) {
             Intent intent = new Intent(MainActivity.this, DrawClockActivity.class);
+            startActivityForResult(intent, 1);
+        } else if (id == R.id.color_picker) {
+            Intent intent = new Intent(MainActivity.this, ColorPickerActivity.class);
             startActivityForResult(intent, 1);
         }
 

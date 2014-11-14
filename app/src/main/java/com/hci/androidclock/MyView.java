@@ -20,9 +20,9 @@ public class MyView extends View {
 
     // Should make user editable in settings
     private final int SQUARE_DENSITY = 6;
-    private final int COLOR_1 = Color.BLACK;
-    private final int COLOR_2 = Color.LTGRAY;
-    private final int TIME_INTERVAL = MINUTE;
+    private final int COLOR_1 = ClockColor.WHITE;
+    private final int COLOR_2 = ClockColor.MIDNIGHT_BLUE;
+    private final int TIME_INTERVAL = SECOND;
 
     private int viewHeight;
     private int viewWidth;

@@ -20,6 +20,14 @@
             android:name=".DrawClockActivity"
             android:label="@string/title_activity_draw_clock" >
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name=".ColorPickerActivity"
+            android:label="@string/title_activity_color_picker" >
+        </activity>
     </application>
 
 </manifest>

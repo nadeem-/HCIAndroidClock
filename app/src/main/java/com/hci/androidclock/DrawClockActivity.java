@@ -8,7 +8,6 @@ import android.view.MenuItem;
 
 public class DrawClockActivity extends Activity {
 
-
     MyView gridView;
 
     @Override
@@ -17,7 +16,6 @@ public class DrawClockActivity extends Activity {
         setContentView(R.layout.activity_draw_clock);
         gridView = (MyView) findViewById(R.id.grid);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -37,9 +35,13 @@ public class DrawClockActivity extends Activity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(DrawClockActivity.this, SettingsActivity.class);
+            startActivityForResult(intent, 1);
         } else if (id == R.id.switch_clock) {
             Intent intent = new Intent(DrawClockActivity.this, MainActivity.class);
+            startActivityForResult(intent, 1);
+        } else if (id == R.id.color_picker) {
+            Intent intent = new Intent(DrawClockActivity.this, ColorPickerActivity.class);
             startActivityForResult(intent, 1);
         }
         return super.onOptionsItemSelected(item);

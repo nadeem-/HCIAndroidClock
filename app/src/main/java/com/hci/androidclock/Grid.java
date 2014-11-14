@@ -47,21 +47,14 @@ public class Grid {
 
         isRandom = true;
 
-        this.primaryColor = getRandColor();
-        this.bgColor = getRandColor();
-        while (colorDistance(bgColor, primaryColor) < 0.2) {
-            bgColor = getRandColor();
-        }
+        primaryColor = ClockColor.getRandomColor();
+        bgColor = ClockColor.getDifferentRandomColor(primaryColor);
     }
 
     public void switchGrid() {
 
         if (isRandom) {
-            bgColor = getRandColor();
-
-            while (colorDistance(bgColor, primaryColor) < 0.2) {
-                bgColor = getRandColor();
-            }
+            bgColor = ClockColor.getDifferentRandomColor(primaryColor);
         }
 
         int temp = primaryColor;
@@ -109,26 +102,26 @@ public class Grid {
         }
     }
 
-    private static int getRandColor() {
-
-        // Make grays more common because they look nice
-        double randGrayProb = 0.3;
-        Random rnd = new Random();
-
-        if (rnd.nextDouble() < randGrayProb) {
-            int gray = rnd.nextInt(256);
-            return Color.argb(255, gray, gray, gray);
-        }
-
-        return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-    }
-
-    // Used to detect how similar two colors are
-    private static double colorDistance(int color1, int color2) {
-        double diffR = (double) (Color.red(color1) - Color.red(color2));
-        double diffG = (double) (Color.green(color1) - Color.green(color2));
-        double diffB = (double) (Color.blue(color1) - Color.blue(color2));
-
-        return Math.sqrt((Math.pow(diffR, 2) + Math.pow(diffG, 2) + Math.pow(diffB, 2)) / (Math.pow(255, 2)*3));
-    }
+//    private static int getRandColor() {
+//
+//        // Make grays more common because they look nice
+//        double randGrayProb = 0.3;
+//        Random rnd = new Random();
+//
+//        if (rnd.nextDouble() < randGrayProb) {
+//            int gray = rnd.nextInt(256);
+//            return Color.argb(255, gray, gray, gray);
+//        }
+//
+//        return Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+//    }
+//
+//    // Used to detect how similar two colors are
+//    private static double colorDistance(int color1, int color2) {
+//        double diffR = (double) (Color.red(color1) - Color.red(color2));
+//        double diffG = (double) (Color.green(color1) - Color.green(color2));
+//        double diffB = (double) (Color.blue(color1) - Color.blue(color2));
+//
+//        return Math.sqrt((Math.pow(diffR, 2) + Math.pow(diffG, 2) + Math.pow(diffB, 2)) / (Math.pow(255, 2)*3));
+//    }
 }
