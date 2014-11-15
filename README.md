@@ -1,8 +1,9 @@
 HCI IA05 Building an Android UI 
 ===============
-Nadeem Malik & James Wills
+### Nadeem Malik & James Wills
 
 Description: A class project for CMSC434: Human-Computer Interaction. The task was to create a custom clock for Android.
+View the demo here: https://www.youtube.com/watch?v=w-mQCWgxB20&feature=youtu.be
 
 To run our app, you need you need the following installed:
 	Java 1.7 (we use jdk1.7.0_67.jdk)
