@@ -76,6 +76,8 @@ public class MainActivity extends Activity {
     String zipCode;
 
     // weather
+    boolean weatherSettingChanged = false;
+
     public final String YAHOO_API_KEY = "dj0yJmk9MjJhZnVUZ0R5V281JmQ9WVdrOWJFWlZSRkJITkdFbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD03NQ--";
     // Yahoo weather station id (retrieved from XML query)
     String woeid = "";
@@ -96,16 +98,12 @@ public class MainActivity extends Activity {
 
         TextView textView = (TextView)findViewById(R.id.textViewCounter);
         textView.setTextSize(16);
-
-        //SharedPreferences settings = getSharedPreferences("pref", 0);
-       // boolean silent = settings.getBoolean("silentMode", false);
-       // setSilent(silent);
     }
 
     protected void onStart() {
         super.onStart();
-
         restorePreferences();
+        getWeatherInfo();
     }
 
     public void restorePreferences() {
@@ -283,6 +281,7 @@ public class MainActivity extends Activity {
                     weatherCondition + ", " + weatherTemp + "°";
             System.out.println(weatherString);
         }catch(Exception e) {
+            System.out.println("woeid:" + woeid);
             e.printStackTrace();
         }
     }
