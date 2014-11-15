@@ -9,5 +9,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_color_picker">ColorPickerActivity</string>
     <string name ="color_picker">Set Custom Colors</string>
+    <string name ="weather_colors">Set Colors by Weather</string>
+    <string name ="random_colors">Random Colors</string>
 
 </resources>

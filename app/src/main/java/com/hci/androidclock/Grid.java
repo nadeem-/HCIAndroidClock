@@ -1,8 +1,11 @@
 package com.hci.androidclock;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -22,38 +25,52 @@ public class Grid {
     int gridWidth;
     int squareHeight;
     int squareWidth;
+    int blocksAdded;
 
-    boolean isRandom = false;
+    Context mContext;
 
     Paint paint;
 
-    public Grid(Canvas c, int screenHeight, int screenWidth, int gridHeight, int gridWidth, int colorA, int colorB) {
+    // Randomize colors
+    public Grid(Context context, Canvas c, int screenHeight, int screenWidth, int gridHeight, int gridWidth) {
+
 
         this.gridHeight = gridHeight;
         this.gridWidth = gridWidth;
         this.squareHeight = (int) Math.ceil(((double) screenHeight) / gridHeight);
         this.squareWidth = (int) Math.ceil(((double) screenWidth) / gridWidth);
         this.paint = new Paint();
-        this.primaryColor = colorA;
-        this.bgColor = colorB;
         this.columnCounts = new int[gridWidth];
+        this.blocksAdded = 0;
+        this.mContext = context;
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int savedCol1 = sharedPrefs.getInt("color1", -1);
+        int savedCol2 = sharedPrefs.getInt("color2", -1);
+
+        if (savedCol1 == -1 || savedCol2 == -1) {
+            randomize();
+        } else {
+            primaryColor = savedCol1;
+            bgColor = savedCol2;
+        }
 
         updateGrid(c);
     }
 
-    // Randomize colors
-    public Grid(Canvas c, int screenHeight, int screenWidth, int gridHeight, int gridWidth) {
-        this(c, screenHeight, screenWidth, gridHeight, gridWidth, 0, 0);
-
-        isRandom = true;
-
+    public void randomize() {
         primaryColor = ClockColor.getRandomColor();
         bgColor = ClockColor.getDifferentRandomColor(primaryColor);
     }
 
     public void switchGrid() {
+        blocksAdded = 0;
 
-        if (isRandom) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        int savedCol1 = sharedPrefs.getInt("color1", -1);
+        int savedCol2 = sharedPrefs.getInt("color2", -1);
+
+        if ((savedCol1 == -1) || (savedCol2 == -1)) {
             bgColor = ClockColor.getDifferentRandomColor(primaryColor);
         }
 
@@ -69,6 +86,7 @@ public class Grid {
     public void addSquareToColumn(int col) {
 
         columnCounts[col] += 1;
+        blocksAdded += 1;
     }
 
     public boolean isColumnFilled(int col) {
@@ -87,6 +105,15 @@ public class Grid {
     }
 
     public void updateGrid(Canvas c) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        int savedCol1 = sharedPrefs.getInt("color1", -1);
+        int savedCol2 = sharedPrefs.getInt("color2", -1);
+
+        if (savedCol1 != -1 && savedCol2 != -1) {
+            primaryColor = savedCol1;
+            bgColor = savedCol2;
+        }
+
         for (int col = 0; col < gridWidth; col++) {
             int top = 0;
             int middle = (gridHeight - columnCounts[col]) * squareHeight;
@@ -99,6 +126,34 @@ public class Grid {
 
             paint.setColor(primaryColor);
             c.drawRect(left, middle, right, bottom, paint);
+        }
+    }
+
+    public double getPercentFilled() {
+        return ((double) blocksAdded)/ (gridHeight * gridWidth);
+    }
+
+    public void fillToPercent(double percent) {
+        double currentPercent = getPercentFilled();
+
+        if (percent == 1) {
+            switchGrid();
+            return;
+        }
+
+        if (currentPercent > percent + 0.5) {
+            switchGrid();
+        }
+
+        while (currentPercent < percent) {
+            List<Integer> unfilled = getUnfilledCols();
+
+            Random rand = new Random();
+
+            int colToAdd = unfilled.get(rand.nextInt(unfilled.size()));
+            addSquareToColumn(colToAdd);
+
+            currentPercent = getPercentFilled();
         }
     }
 }

@@ -2,10 +2,12 @@ package com.hci.androidclock;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -84,7 +86,10 @@ public class ColorPickerActivity extends Activity {
                 if (color1 == NO_COLOR || color2 == NO_COLOR) {
                     Toast.makeText(mContext, "You need to choose two colors.", Toast.LENGTH_SHORT);
                 } else {
-                    // TODO save color1 and color2
+                    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    SharedPreferences.Editor editor = sharedPrefs.edit();
+                    editor.putInt("color1", color1).apply();
+                    editor.putInt("color2", color2).apply();
                     finish();
                 }
             }
@@ -246,4 +251,6 @@ public class ColorPickerActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
+
+
 }

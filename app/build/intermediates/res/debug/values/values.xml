@@ -37,13 +37,23 @@
     <string name="app_name">AndroidClock</string>
     <string name="color_picker">Set Custom Colors</string>
     <string name="hello_world">Hello world!</string>
+    <string name="random_colors">Random Colors</string>
     <string name="switch_clock">Switch Clock</string>
     <string name="title_activity_color_picker">ColorPickerActivity</string>
     <string name="title_activity_draw_clock">DrawClock</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="weather_colors">Set Colors by Weather</string>
     <!-- From: file:/Users/jamesbwills/Google%20Drive/Workspaces/Android%20Studio/HCIAndroidClock/HCIAndroidClock/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+    </style>
+    <style name="ClockOverlay">
+        <item name="android:textColor">#ecf0f1</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
     </style>
 </resources>

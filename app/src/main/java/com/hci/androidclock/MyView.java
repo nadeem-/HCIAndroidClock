@@ -2,12 +2,16 @@ package com.hci.androidclock;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
@@ -20,14 +24,14 @@ public class MyView extends View {
 
     // Should make user editable in settings
     private final int SQUARE_DENSITY = 6;
-    private final int COLOR_1 = ClockColor.WHITE;
-    private final int COLOR_2 = ClockColor.MIDNIGHT_BLUE;
-    private final int TIME_INTERVAL = SECOND;
+    private final int TIME_INTERVAL = MINUTE;
 
     private int viewHeight;
     private int viewWidth;
     private int numCols;
     private int numRows;
+
+    private Context mContext;
 
     private Timer _timer = new Timer();
 
@@ -35,15 +39,18 @@ public class MyView extends View {
 
     public MyView(Context context) {
         super(context);
+        mContext = context;
         init();
     }
     public MyView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mContext = context;
         init();
     }
 
     public MyView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        mContext = context;
         init();
     }
 
@@ -66,7 +73,6 @@ public class MyView extends View {
     }
 
     private void startTimer() {
-        int interval = TIME_INTERVAL / (numRows * numCols);
 
         final MyView thisView = this;
 
@@ -81,30 +87,32 @@ public class MyView extends View {
                     @Override
                     public void run() {
                         if (blockGrid != null) {
+                            double percent;
 
-                            addABlock();
+                            Calendar currentCalendarTime = Calendar.getInstance();
+                            if (TIME_INTERVAL == SECOND) {
+                                double time = currentCalendarTime.get(Calendar.MILLISECOND);
+                                percent = time / SECOND;
+                            } else if (TIME_INTERVAL == MINUTE) {
+                                int seconds = currentCalendarTime.get(Calendar.SECOND) * 1000;
+                                double time = currentCalendarTime.get(Calendar.MILLISECOND) + seconds;
+                                percent = time / MINUTE;
+                            }
+
+                            blockGrid.fillToPercent(percent);
+
+                            invalidate();
                         }
+
                     }
                 });
             }
-        }, 0, interval);
+        }, 0, 20);
 
     }
 
-    public void addABlock() {
-        List<Integer> unfilled = blockGrid.getUnfilledCols();
-
-        Random rand = new Random();
-
-        if (unfilled.isEmpty()) {
-            blockGrid.switchGrid();
-            unfilled = blockGrid.getUnfilledCols();
-        }
-
-        int colToAdd = unfilled.get(rand.nextInt(unfilled.size()));
-        blockGrid.addSquareToColumn(colToAdd);
-
-        invalidate();
+    public void randomize() {
+        blockGrid.randomize();
     }
 
     public void activityPaused() {
@@ -116,7 +124,7 @@ public class MyView extends View {
         super.onDraw(canvas);
 
         if (blockGrid == null) {
-            blockGrid = new Grid(canvas, viewHeight, viewWidth, numRows, numCols);
+            blockGrid = new Grid(mContext, canvas, viewHeight, viewWidth, numRows, numCols);
         } else {
             blockGrid.updateGrid(canvas);
         }
