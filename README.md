@@ -1,10 +1,11 @@
 HCI IA05 Building an Android UI 
 ===============
-### Nadeem Malik & James Wills
+###### Nadeem Malik & James Wills
 
-Description: A class project for CMSC434: Human-Computer Interaction. The task was to create a custom clock for Android.
-View the demo here: https://www.youtube.com/watch?v=w-mQCWgxB20&feature=youtu.be
+###### Description: A class project for CMSC434: Human-Computer Interaction. The task was to create a custom clock for Android.  
+###### View the demo here: https://www.youtube.com/watch?v=w-mQCWgxB20&feature=youtu.be  
 
+###### Installation:
 To run our app, you need you need the following installed:
 	Java 1.7 (we use jdk1.7.0_67.jdk)
 	API 18: Android 4.3 (Jelly Bean) (Compile SDK Version)
@@ -20,7 +21,8 @@ You may have to change your SDK location as it is likely to differ from our Andr
 To start the app, open the project in Android Studio and 
 click the Run button.
 
-You will see the basic clock first. 
+###### Tutorial/Features:
+You will see the basic clock when the app first launches. 
 
 To adjust settings, click the settings menu icon (3 dots) and tap "Settings".
 	* Here you can change basic configurations such as time format and text color.
@@ -28,9 +30,7 @@ To adjust settings, click the settings menu icon (3 dots) and tap "Settings".
 
 To switch clocks, tap "Switch Clock" in the settings menu.
 
-===============
-CUSTOM CLOCK
-===============
+###### Custom Clock:
 
 You can click the settings menu to set random colors or use custom colors for the animation.
 
