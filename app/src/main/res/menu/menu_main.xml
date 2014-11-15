@@ -4,6 +4,4 @@
         android:orderInCategory="100" android:showAsAction="never" />
     <item android:id="@+id/switch_clock" android:title="@string/switch_clock"
           android:orderInCategory="100" android:showAsAction="never" />
-    <item android:id="@+id/color_picker" android:title="@string/color_picker"
-          android:orderInCategory="100" android:showAsAction="never" />
 </menu>

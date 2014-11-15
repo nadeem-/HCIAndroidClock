@@ -7,4 +7,4 @@
     <item android:id="@+id/color_picker" android:title="@string/color_picker"
           android:orderInCategory="100" android:showAsAction="never" />
 </menu>
-<!-- From: file:/Users/nadeem/AndroidStudioProjects/HCIAndroidClock/app/src/main/res/menu/menu_main.xml -->
+<!-- From: file:/Users/jamesbwills/Google%20Drive/Workspaces/Android%20Studio/HCIAndroidClock/HCIAndroidClock/app/src/main/res/menu/menu_main.xml -->

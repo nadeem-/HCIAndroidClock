@@ -8,6 +8,6 @@
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_color_picker">ColorPickerActivity</string>
-    <string name ="color_picker">Color Picker</string>
+    <string name ="color_picker">Set Custom Colors</string>
 
 </resources>

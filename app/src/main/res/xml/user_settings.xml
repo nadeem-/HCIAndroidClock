@@ -20,5 +20,6 @@
             android:entries="@array/textColors"
             android:entryValues="@array/textColorsValues"
             />
+
     </PreferenceCategory>
 </PreferenceScreen>

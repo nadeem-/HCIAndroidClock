@@ -32,26 +32,26 @@ public class ClockColor {
     public static final int MIDNIGHT_BLUE = Color.parseColor("#2c3e50");
 
     private static final int[] allColors = new int[] {
-        TURQUOISE,
-        DARK_TURQUOISE,
-        YELLOW,
-        ORANGE,
-        CARROT,
-        PUMPKIN,
-        RED,
-        DARK_RED,
-        WHITE,
-        LIGHT_GRAY,
-        MED_GRAY,
-        DARK_GRAY,
-        GREEN,
-        DARK_GREEN,
-        PURPLE,
-        DARK_PURPLE,
-        LIGHT_BLUE,
-        MED_BLUE,
-        DARK_BLUE,
-        MIDNIGHT_BLUE
+            TURQUOISE,
+            DARK_TURQUOISE,
+            YELLOW,
+            ORANGE,
+            CARROT,
+            PUMPKIN,
+            RED,
+            DARK_RED,
+            WHITE,
+            LIGHT_GRAY,
+            MED_GRAY,
+            DARK_GRAY,
+            GREEN,
+            DARK_GREEN,
+            PURPLE,
+            DARK_PURPLE,
+            LIGHT_BLUE,
+            MED_BLUE,
+            DARK_BLUE,
+            MIDNIGHT_BLUE
     };
 
     public static int[] getAllColors() {
@@ -72,5 +72,21 @@ public class ClockColor {
         }
 
         return newColor;
+    }
+
+    public static boolean isLightColor(int color) {
+        double r = Color.red(color) * 0.3;
+        double g = Color.green(color) * 0.6;
+        double b = Color.blue(color) * 0.1;
+        return r + g + b > 186;
+    }
+
+    public static int indexOf(int color) {
+        for (int i = 0; i < allColors.length; i++) {
+            if (allColors[i] == color) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

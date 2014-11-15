@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 public class ColorPickerActivity extends Activity {
 
-    private final int NO_COLOR = -1;
+    private final int NO_COLOR = Color.BLACK;
 
 
     private final int STATE_CHOOSING_1 = 1;
@@ -34,6 +34,8 @@ public class ColorPickerActivity extends Activity {
     private Button selectColorsButton;
     private Button colorButton1;
     private Button colorButton2;
+    private Button selector1;
+    private Button selector2;
 
     private int color1 = NO_COLOR;
     private int color2 = NO_COLOR;
@@ -50,12 +52,24 @@ public class ColorPickerActivity extends Activity {
 
         mGridView.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                int newColor = ClockColor.getAllColors()[position];
+
                 if (state == STATE_CHOOSING_1) {
-                    color1 = ClockColor.getAllColors()[position];
-                    state = STATE_CHOOSING_2;
+                    if (newColor != color2) {
+                        color1 = newColor;
+                    }
+
+                    if (color2 == NO_COLOR) {
+                        state = STATE_CHOOSING_2;
+                    }
                 } else {
-                    color2 = ClockColor.getAllColors()[position];
-                    state = STATE_CHOOSING_1;
+                    if (newColor != color1) {
+                        color2 = newColor;
+                    }
+
+                    if (color1 == NO_COLOR) {
+                        state = STATE_CHOOSING_1;
+                    }
                 }
 
                 update();
@@ -67,38 +81,67 @@ public class ColorPickerActivity extends Activity {
         selectColorsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // FINISH
+                if (color1 == NO_COLOR || color2 == NO_COLOR) {
+                    Toast.makeText(mContext, "You need to choose two colors.", Toast.LENGTH_SHORT);
+                } else {
+                    // TODO save color1 and color2
+                    finish();
+                }
             }
         });
 
-        colorButton1 = (Button) findViewById(R.id.colorButton1);
-        colorButton1.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener listener1 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 state = STATE_CHOOSING_1;
 
                 update();
             }
-        });
+        };
 
-        colorButton2 = (Button) findViewById(R.id.colorButton2);
-        colorButton2.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener listener2 = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 state = STATE_CHOOSING_2;
 
                 update();
             }
-        });
+        };
+
+        colorButton1 = (Button) findViewById(R.id.colorButton1);
+        colorButton1.setOnClickListener(listener1);
+
+        colorButton2 = (Button) findViewById(R.id.colorButton2);
+        colorButton2.setOnClickListener(listener2);
+
+        selector1 = (Button) findViewById(R.id.Selector1);
+        selector1.setOnClickListener(listener1);
+
+        selector2 = (Button) findViewById(R.id.Selector2);
+        selector2.setOnClickListener(listener2);
     }
 
     private void update() {
-        if (color1 != NO_COLOR) {
-            colorButton1.setBackgroundColor(color1);
+        colorButton1.setBackgroundColor(color1);
+        if (ClockColor.isLightColor(color1)) {
+            colorButton1.setTextColor(ClockColor.MIDNIGHT_BLUE);
+        } else {
+            colorButton1.setTextColor(ClockColor.WHITE);
         }
 
-        if (color2 != NO_COLOR) {
-            colorButton2.setBackgroundColor(color2);
+        colorButton2.setBackgroundColor(color2);
+        if (ClockColor.isLightColor(color2)) {
+            colorButton2.setTextColor(ClockColor.MIDNIGHT_BLUE);
+        } else {
+            colorButton2.setTextColor(ClockColor.WHITE);
+        }
+
+        if (state == STATE_CHOOSING_1) {
+            selector1.setBackgroundColor(0xffffff);
+            selector2.setBackgroundColor(color2);
+        } else {
+            selector2.setBackgroundColor(0xffffff);
+            selector1.setBackgroundColor(color1);
         }
     }
 
@@ -108,6 +151,8 @@ public class ColorPickerActivity extends Activity {
         super.onWindowFocusChanged(hasFocus);
 
         final int screenHeight = mGridView.getHeight();
+
+        update();
 
         mGridView.setAdapter(new ListAdapter() {
 
@@ -125,7 +170,6 @@ public class ColorPickerActivity extends Activity {
 
             @Override
             public void registerDataSetObserver(DataSetObserver observer) {
-
             }
 
             @Override
@@ -140,7 +184,7 @@ public class ColorPickerActivity extends Activity {
 
             @Override
             public Object getItem(int position) {
-                return null;
+                return colors[position];
             }
 
             @Override
@@ -189,6 +233,7 @@ public class ColorPickerActivity extends Activity {
             public boolean isEmpty() {
                 return false;
             }
+
         });
     }
 
@@ -201,6 +246,4 @@ public class ColorPickerActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
-
-
 }
