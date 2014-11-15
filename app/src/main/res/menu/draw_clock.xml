@@ -7,16 +7,13 @@
         android:orderInCategory="100"
         android:showAsAction="never" />
 
-
-    <item android:id="@+id/weather_colors"
-          android:title="@string/weather_colors"
-          android:orderInCategory="100"
-          android:showAsAction="never" />
-
     <item android:id="@+id/random_colors"
           android:title="@string/random_colors"
           android:orderInCategory="100"
           android:showAsAction="never" />
+
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+          android:orderInCategory="100" android:showAsAction="never" />
 
     <item android:id="@+id/switch_clock" android:title="@string/switch_clock"
           android:orderInCategory="100" android:showAsAction="never" />

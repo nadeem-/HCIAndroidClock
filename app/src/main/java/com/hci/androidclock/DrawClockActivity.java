@@ -3,6 +3,7 @@ package com.hci.androidclock;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
@@ -10,9 +11,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 public class DrawClockActivity extends Activity {
 
@@ -87,7 +97,11 @@ public class DrawClockActivity extends Activity {
             editor.putInt("color1", -1).apply();
             editor.putInt("color2", -1).apply();
             gridView.randomize();
+        } else if (id == R.id.action_settings) {
+            Intent intent = new Intent(DrawClockActivity.this, UserSettingActivity.class);
+            startActivityForResult(intent, 1);
         }
+        
         return super.onOptionsItemSelected(item);
     }
 
@@ -116,7 +130,14 @@ public class DrawClockActivity extends Activity {
                     public void run(){
 
                         TextView textView = (TextView)findViewById(R.id.textViewClock);
-                        textView.setText(timeStr);
+                        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        String s = sharedPrefs.getString("weather", "none");
+
+                        if (s.equals("none")) {
+                            textView.setText(timeStr);
+                        } else {
+                            textView.setText(timeStr + "\n" + s);
+                        }
                     }
                 });
             }

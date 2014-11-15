@@ -277,9 +277,19 @@ public class MainActivity extends Activity {
             weatherCity = locationNode.getAttribute("city");
             weatherState = locationNode.getAttribute("region");
 
-            weatherString = "Weather for " + weatherCity + ", " + weatherState  + ": " +
-                    weatherCondition + ", " + weatherTemp + "°";
+            weatherString = weatherCondition + ", " + weatherTemp + "°";
             System.out.println(weatherString);
+
+            TextView textView = (TextView)findViewById(R.id.textViewCounter);
+            textView.setTextColor(clockTextColor);
+
+            if(displayWeatherInfo) {
+                textView.setText(timeStr + "\n" + dateStr +"\n" + weatherString);
+            }
+
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+            editor.putString("weather", weatherString).apply();
         }catch(Exception e) {
             System.out.println("woeid:" + woeid);
             e.printStackTrace();
