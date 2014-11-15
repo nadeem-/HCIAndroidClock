@@ -20,6 +20,17 @@
             android:entries="@array/textColors"
             android:entryValues="@array/textColorsValues"
             />
-
+        <PreferenceCategory android:title="Advanced Clock Settings" >
+            <SwitchPreference
+                android:defaultValue="false"
+                android:key="prefShowWeatherInfo"
+                android:summary="Show Weather Info"
+                android:title="Weather Info" >
+            </SwitchPreference>
+            <EditTextPreference
+                android:title="ZIP Code"
+                android:summary="Enter Your ZIP code to display local weather info"
+                android:key="prefZIPCode"/>
+        </PreferenceCategory>
     </PreferenceCategory>
 </PreferenceScreen>

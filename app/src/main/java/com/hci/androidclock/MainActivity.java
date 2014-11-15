@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -11,10 +12,36 @@ import android.os.Handler;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+import org.w3c.dom.Element;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 
 
 
@@ -40,20 +67,37 @@ public class MainActivity extends Activity {
 
 
     // preferences
-    public final String blackColorStr = "-16777216";
+    public final String BLACK_COLOR_STR = "-16777216";
+    public final String COLLEGE_PARK_ZIP = "20740"; // default ZIP (if none provided)
     boolean display24HrTime;
     boolean displayTimeZone;
     int clockTextColor;
+    boolean displayWeatherInfo;
+    String zipCode;
+
+    // weather
+    public final String YAHOO_API_KEY = "dj0yJmk9MjJhZnVUZ0R5V281JmQ9WVdrOWJFWlZSRkJITkdFbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD03NQ--";
+    // Yahoo weather station id (retrieved from XML query)
+    String woeid = "";
+    public String weatherCondition = "";
+    public String weatherTemp = "";
+    public String weatherCity = "";
+    public String weatherState = "";
+    public String weatherString = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         restorePreferences();
-
+        getWeatherInfo();
         updateClock();
 
-       //SharedPreferences settings = getSharedPreferences("pref", 0);
+        TextView textView = (TextView)findViewById(R.id.textViewCounter);
+        textView.setTextSize(16);
+
+        //SharedPreferences settings = getSharedPreferences("pref", 0);
        // boolean silent = settings.getBoolean("silentMode", false);
        // setSilent(silent);
     }
@@ -70,7 +114,9 @@ public class MainActivity extends Activity {
         displayTimeZone = sharedPrefs.getBoolean("prefClockTimeZone", false);
 
         // update clock text color
-        clockTextColor = Integer.parseInt(sharedPrefs.getString("prefClockTextColor", blackColorStr));
+        clockTextColor = Integer.parseInt(sharedPrefs.getString("prefClockTextColor", BLACK_COLOR_STR));
+        displayWeatherInfo = sharedPrefs.getBoolean("prefDisplayWeatherInfo", false);
+        zipCode = sharedPrefs.getString("prefZIPCode", COLLEGE_PARK_ZIP);
     }
 
     @Override
@@ -145,12 +191,110 @@ public class MainActivity extends Activity {
                     public void run(){
 
                         TextView textView = (TextView)findViewById(R.id.textViewCounter);
-                        textView.setText(timeStr + "\n" + dateStr);
                         textView.setTextColor(clockTextColor);
+
+                        if(displayWeatherInfo) {
+                            textView.setText(timeStr + "\n" + dateStr +"\n" + weatherString);
+                        }else {
+                            textView.setText(timeStr + "\n" + dateStr);
+                        }
                     }
                 });
             }
         }, 0, 500);
     }
 
+
+    class GetWoeidTask extends AsyncTask<String, Void, Document> {
+
+        private Exception exception;
+
+        protected Document doInBackground(String... urls) {
+            try {
+                System.out.println("GET XML ALT");
+                URL url = new URL(urls[0]);
+                URLConnection conn = url.openConnection();
+
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document doc = builder.parse(conn.getInputStream());
+                return doc;
+            } catch (Exception e) {
+                this.exception = e;
+                return null;
+            }
+        }
+
+        protected void onPostExecute(Document doc) {
+            getWoeidFromLocationXML(doc);
+
+            // excecute a weather query
+            String weatherXMLQuery = "http://weather.yahooapis.com/forecastrss?w=" + woeid;
+            new GetWeatherTask().execute(weatherXMLQuery);
+        }
+    }
+
+    class GetWeatherTask extends AsyncTask<String, Void, Document> {
+
+        private Exception exception;
+
+        protected Document doInBackground(String... urls) {
+            try {
+                System.out.println("GET WEATHER TASK");
+                URL url = new URL(urls[0]);
+                URLConnection conn = url.openConnection();
+
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document doc = builder.parse(conn.getInputStream());
+                return doc;
+            } catch (Exception e) {
+                this.exception = e;
+                return null;
+            }
+        }
+
+        protected void onPostExecute(Document doc) {
+            getWeatherFromXML(doc);
+        }
+    }
+
+    public void getWeatherInfo() {
+        String locationQuery = "http://where.yahooapis.com/v1/places.q(" + zipCode + ")?appid="
+                + YAHOO_API_KEY;
+        System.out.println("LOCATION Query:" + locationQuery);
+        new GetWoeidTask().execute(locationQuery);
+    }
+
+    public void getWeatherFromXML(Document doc) {
+        try {
+            NodeList nodes = doc.getElementsByTagName("item");
+            NodeList elementNodes = ((Element) nodes.item(0)).getElementsByTagName("yweather:condition");
+            Element element = (Element) elementNodes.item(0);
+
+            weatherCondition = element.getAttribute("text");
+            weatherTemp = element.getAttribute("temp");
+
+            Element locationNode = (Element) doc.getElementsByTagName("yweather:location").item(0);
+            weatherCity = locationNode.getAttribute("city");
+            weatherState = locationNode.getAttribute("region");
+
+            weatherString = "Weather for " + weatherCity + ", " + weatherState  + ": " +
+                    weatherCondition + ", " + weatherTemp + "°";
+            System.out.println(weatherString);
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getWoeidFromLocationXML(Document doc) {
+        try {
+            NodeList nodes = doc.getElementsByTagName("place");
+            NodeList elementNodes = ((Element) nodes.item(0)).getElementsByTagName("woeid");
+            Element element = (Element) elementNodes.item(0);
+            woeid = element.getTextContent();
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

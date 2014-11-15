@@ -5,4 +5,4 @@
     <item android:id="@+id/switch_clock" android:title="@string/switch_clock"
           android:orderInCategory="100" android:showAsAction="never" />
 </menu>
-<!-- From: file:/Users/jamesbwills/Google%20Drive/Workspaces/Android%20Studio/HCIAndroidClock/HCIAndroidClock/app/src/main/res/menu/menu_main.xml -->
+<!-- From: file:/Users/nadeem/AndroidStudioProjects/HCIAndroidClock/app/src/main/res/menu/menu_main.xml -->
