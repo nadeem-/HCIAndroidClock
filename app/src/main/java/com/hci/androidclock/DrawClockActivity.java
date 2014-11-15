@@ -40,9 +40,6 @@ public class DrawClockActivity extends Activity {
         } else if (id == R.id.switch_clock) {
             Intent intent = new Intent(DrawClockActivity.this, MainActivity.class);
             startActivityForResult(intent, 1);
-        } else if (id == R.id.color_picker) {
-            Intent intent = new Intent(DrawClockActivity.this, ColorPickerActivity.class);
-            startActivityForResult(intent, 1);
         }
         return super.onOptionsItemSelected(item);
     }

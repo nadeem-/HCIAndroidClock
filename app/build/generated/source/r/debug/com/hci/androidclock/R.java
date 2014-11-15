@@ -62,7 +62,6 @@ containing a value of this type.
         public static final int action_settings=0x7f0a0009;
         public static final int colorButton1=0x7f0a0002;
         public static final int colorButton2=0x7f0a0003;
-        public static final int color_picker=0x7f0a000b;
         public static final int grid=0x7f0a0007;
         public static final int gridView=0x7f0a0000;
         public static final int linearLayout=0x7f0a0004;
