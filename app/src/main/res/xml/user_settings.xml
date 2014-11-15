@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="Weather" >
+        <SwitchPreference
+            android:title="Weather Info"
+            android:summary="Display local weather"
+            android:key="prefDisplayWeather"/>
+        <EditTextPreference
+            android:title="ZIP Code"
+            android:summary="Enter your ZIP code to get info about local weather"
+            android:key="prefZIPCode"/>
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="Basic Clock Settings" >
         <SwitchPreference
             android:defaultValue="false"
@@ -21,4 +33,5 @@
             android:entryValues="@array/textColorsValues"
             />
     </PreferenceCategory>
+
 </PreferenceScreen>

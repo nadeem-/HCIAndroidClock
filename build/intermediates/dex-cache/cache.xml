@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="/Users/nadeem/AndroidStudioProjects/HCIAndroidClock/app/build/intermediates/pre-dexed/debug/internal_impl-20.0.0-287fb8ec9b2b4f3e5690959e8f84e8f4d2f5d4a6.jar"
+        jar="/Users/nadeem/AndroidStudioProjects/HCIAndroidClock/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/libs/internal_impl-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="e40b3078e3fbd353c9f44da8df25a8fc0078209d"/>
+    <item
+        dex="/Users/nadeem/AndroidStudioProjects/HCIAndroidClock/app/build/intermediates/pre-dexed/debug/support-annotations-20.0.0-c3ecb059b4be970270c35c0e755380f025cab153.jar"
+        jar="/Applications/android-sdk/extras/android/m2repository/com/android/support/support-annotations/20.0.0/support-annotations-20.0.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="9d9013e9ff35fc3756411e62873c363c70c638fa"/>
+    <item
+        dex="/Users/nadeem/AndroidStudioProjects/HCIAndroidClock/app/build/intermediates/pre-dexed/debug/classes-5f89fa2cd5b4d1aab1320a06fd8089d5857d3c5d.jar"
+        jar="/Users/nadeem/AndroidStudioProjects/HCIAndroidClock/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.1.71/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="0f6d5c1ef2e982c3b7858408e3df389cf5d202da"/>
+    <item
+        dex="/Users/nadeem/AndroidStudioProjects/HCIAndroidClock/app/build/intermediates/pre-dexed/debug/classes-1c269b7592ac6e629205ad43e010ae809db4e312.jar"
+        jar="/Users/nadeem/AndroidStudioProjects/HCIAndroidClock/app/build/intermediates/exploded-aar/com.android.support/support-v4/20.0.0/classes.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="8694693636ab36910c8100ce527c258ff3ebece0"/>
+
+</pre-dex-items>
